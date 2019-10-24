@@ -1,0 +1,67 @@
+<script src="https://unpkg.com/react@15.3.1/dist/react.js"></script>
+<script src="https://unpkg.com/react-dom@15.3.1/dist/react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+
+<title>Declarativo</title>
+<div id="app"></div>
+
+<script type="text/babel">
+  class App extends React.Component {
+    constructor() {
+      super();
+      this.state = { nombreEstado: '', esMexicano: null, output: null };
+      this.updateEsMexicano = this.updateEsMexicano.bind(this);
+      this.updateNombreEstado = this.updateNombreEstado.bind(this);
+      this.onSave = this.onSave.bind(this);
+    }
+    onSave() {
+      let formData = {
+        esMexicano: this.state.esMexicano,
+        nombreEstado: this.state.nombreEstado
+      };
+      this.setState({ output: JSON.stringify(formData) });
+    }
+    updateEsMexicano({ target }) {
+      this.setState({ esMexicano: target.value === "yes" });
+    }
+    updateNombreEstado({ target }) {
+      this.setState({ nombreEstado: target.value });
+    }
+    isValid() {
+      return !this.state.esMexicano ||
+             (this.state.esMexicano && this.state.nombreEstado);
+    }
+    render() {
+      return (
+        <div>
+          <p>¿Vive usted en México?</p>
+          <label>
+            <input onChange={this.updateEsMexicano}
+                   name="esMexicano"
+                   type="radio"
+                   value="yes" />{' '}
+            Sí
+          </label>
+          <label>
+            <input onChange={this.updateEsMexicano}
+                   name="esMexicano"
+                   type="radio"
+                   value="no" />{' '}
+            No
+          </label>
+          <br/><br/>
+          {this.state.esMexicano && (
+            <div>
+              <label>¿En cuál estado reside actualmente?</label><br />
+              <input onChange={this.updateNombreEstado} value={this.state.nombreEstado} />
+            </div>
+          )}
+          <br/>
+          
+          <button onClick={this.onSave} disabled={!this.isValid()}>Guardar</button>
+          <div>{this.state.output}</div>
+        </div>
+      );
+    }
+  }
+  ReactDOM.render(<App/>, document.getElementById('app'));
