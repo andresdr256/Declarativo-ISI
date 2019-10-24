@@ -1,0 +1,85 @@
+<!-- =================================================================== --> 
+<!-- =========================== INICIA HTML =========================== -->  
+<!-- =================================================================== -->
+
+<title>Imperativo</title>
+
+<div class="Pregunta-Es-Mexicano">
+  <p>¿Vive usted en México?</p>
+  <label>
+    <input type="radio" name="esMexicano" value="si">
+    Sí
+  </label>
+
+  <label>
+    <input type="radio" name="esMexicano" value="no">
+    No
+  </label>
+</div>
+
+<br><br>
+
+<div class="Pregunta-Nombre-Estado" style="display: none">
+  <label>¿En cuál estado reside actualmente?</label><br>
+  <input>
+</div>
+
+<br><br>
+
+<button disabled>Guardar</button>
+
+<br><br>
+
+<div id="output"></div>
+
+
+<!-- =================================================================== --> 
+<!-- ======================== INICIA JAVASCRIPT ======================== -->  
+<!-- =================================================================== -->
+
+
+<script>
+  // Se obtienen referencias a partes importantes del DOM
+  let preguntaNombreEstado = document.querySelector('.Pregunta-Nombre-Estado');
+  let preguntaNombreEstadoInput = document.querySelector('.Pregunta-Nombre-Estado input');
+  let preguntaEsMexicano = document.querySelector('.Pregunta-Es-Mexicano');
+  let preguntaEsMexicanoYes = document.querySelector('.Pregunta-Es-Mexicano input');
+  let saveButton = document.querySelector('button');
+  let output = document.querySelector('#output');
+  
+
+  // Cuando el usuario responde si vive o no en México...
+  preguntaEsMexicano.addEventListener('change', function({ target }) {
+    if (target.value === 'si') {
+      preguntaNombreEstado.style.display = 'block';
+      saveButton.disabled = !preguntaNombreEstadoInput.value.length;
+    } else {
+      preguntaNombreEstado.style.display = 'none';
+      saveButton.disabled = false;
+    }
+  });
+
+
+  // Cuando el usuario escribe en la casilla nombreEstado...
+  preguntaNombreEstado.addEventListener('input', function({ target }) {
+    var nombreEstado = target.value;
+    if (preguntaNombreEstadoInput.value.length) {
+      saveButton.disabled = false;
+    } else {
+      saveButton.disabled = true;
+    }
+  });
+
+
+  // Cuando el usuario envía el formulario ...
+  saveButton.addEventListener('click', function({ target }) {
+    var data = {};
+    if (preguntaEsMexicanoYes.checked) {
+      data.esMexicano = true;
+      data.nombreEstado = preguntaNombreEstadoInput.value;
+    } else {
+      data.esMexicano = false;
+    }
+    output.innerHTML = JSON.stringify(data);
+  });
+</script>
